@@ -21,14 +21,21 @@ exports.newProduct = catchAsyncError(async(req, res, next) =>{
 //getting all products (/api/v1/products?keyword=laptop)
 
 exports.getProducts = catchAsyncError(async (req, res, next) =>{
+
+    const resultPerPage = 4;
+    const productCount = await Product.countDocuments();
     
     const apifeatures = new APIFeatures(Product.find(),req.query)
                         .search()
                         .filter()
+                        .pagination(resultPerPage)
+
+
         const products = await apifeatures.query;
         res.status(200).json({
             success: true,
             count: products.length,
+            productCount,
             products
         })
 })
