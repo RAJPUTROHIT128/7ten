@@ -7,7 +7,7 @@ const { getProducts, newProduct, getSingleProduct, updateProduct, deleteProduct 
 
 const { isAuthenticatedUser } = require("../middlewares/auth");
 //product showing page
-router.route("/products").get(isAuthenticatedUser, getProducts);
+router.route("/products").get(getProducts);
 
 //single product description page
 
@@ -15,14 +15,14 @@ router.route("/product/:id").get(getSingleProduct);
 
 
 //new product adding page
-router.route("/admin/product/new").post(newProduct);
+router.route("/admin/product/new").post(isAuthenticatedUser, newProduct);
 
 //Updating Product page
 
-router.route("/admin/product/:id").put(updateProduct);
+router.route("/admin/product/:id").put(isAuthenticatedUser, updateProduct);
 
 //deleting Product page
 
-router.route("/admin/product/:id").delete(deleteProduct);
+router.route("/admin/product/:id").delete(isAuthenticatedUser, deleteProduct);
 
 module.exports = router;
