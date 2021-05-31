@@ -3,6 +3,7 @@ const User = require("../models/user");
 const ErrorHandler = require("../utility/errorHandler");
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const sendToken = require("../utility/jwtToken");
+const sendEmail = require("../utility/sendEmail");
 
 //Register User (/api/v1/register)
 
@@ -52,6 +53,47 @@ exports.loginUser = catchAsyncError(async (req, res, next) =>{
     }
 
     sendToken(user, 200, res)
+})
+
+//Forgot Password (/api/v1/password/forgot)
+
+exports.forgotPassword = catchAsyncError(async (req, res, next) =>{
+    const user = await User.findOne({email: req.body.email});
+    if(!user){
+        return next(new ErrorHandler("User not found with this email",404));
+    }
+
+    //Get resetToken
+
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save({validateBeforeSave: false})
+
+    //Create resetPassword url
+    const resetUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`;
+
+    const message = `Your password reset token is generated:\n\n${resetUrl}\n\n If you do not requested this email, then please ignore it.`
+
+    try{
+        await sendEmail({
+            email:user.email,
+            subject: "7ten Password Recovery mail",
+            message
+        })
+
+
+        res.status(200).json({
+            success: true,
+            message: `Email send to: ${user.email}`
+        })
+
+    }catch(error){
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save({validateBeforeSave: false})
+        return next(new ErrorHandler(error.message, 500));
+    }
+
 })
 
 
