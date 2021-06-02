@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
 
-const { getProducts, newProduct, getSingleProduct, updateProduct, deleteProduct } = require("../controllers/productControllers")
+const { getProducts, newProduct, getSingleProduct, updateProduct, deleteProduct, createProductReview } = require("../controllers/productControllers")
 
 
 
@@ -24,5 +24,8 @@ router.route("/admin/product/:id").put(isAuthenticatedUser, authorizeRoles("admi
 //deleting Product page
 
 router.route("/admin/product/:id").delete(isAuthenticatedUser, authorizeRoles("admin"), deleteProduct);
+
+
+router.route("/review").put(isAuthenticatedUser, createProductReview);
 
 module.exports = router;
