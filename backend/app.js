@@ -10,10 +10,12 @@ app.use(cookieParser())
 
 const products = require("./route/product");
 const auth = require("./route/auth");
+const order = require("./route/order");
 
 
 app.use("/api/v1", products)
 app.use("/api/v1", auth);
+app.use("/api/v1", order);
 //Middleware to handle errors
 
 app.use(errorMiddleware);
