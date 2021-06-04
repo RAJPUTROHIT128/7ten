@@ -35,14 +35,12 @@ exports.getProducts = catchAsyncError(async (req, res, next) =>{
 
         const products = await apifeatures.query;
 
-        setTimeout(() => {
             res.status(200).json({
                 success: true,
                 //count: products.length
                 productsCount,
                 products
             })
-        }, 2000);
 
 })
 
