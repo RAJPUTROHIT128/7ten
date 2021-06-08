@@ -5,9 +5,18 @@ const catchAsyncError = require("../middlewares/catchAsyncError");
 const sendToken = require("../utility/jwtToken");
 const sendEmail = require("../utility/sendEmail");
 
+const cloudinary = require("cloudinary");
+
 //Register User (/api/v1/register)
 
 exports.registerUser = catchAsyncError(async (req, res, next) =>{
+    
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatar",
+        width: 150,
+        crop: "scale"
+    })
+
     const { 
         name,
         email,
@@ -19,8 +28,8 @@ exports.registerUser = catchAsyncError(async (req, res, next) =>{
         email, 
         password,
         avatar:{
-            public_id: "avatar/man-avatar-profile_de5mut",
-            url: "https://res.cloudinary.com/djmhwjrwa/image/upload/v1622361027/avatar/man-avatar-profile_de5mut.jpg",
+            public_id: result.public_id,
+            url: result.secure_url
         }
         })
 
