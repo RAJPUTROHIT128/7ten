@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
-import MetaData from '../layout/MetaData'
+import MetaData from '../layouts/MetaData'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
@@ -132,7 +132,7 @@ const Register = ({ history }) => {
                                         name='avatar'
                                         className='custom-file-input'
                                         id='customFile'
-                                        accept="iamges/*"
+                                        accept="images/*"
                                         onChange={onChange}
                                     />
                                     <label className='custom-file-label' htmlFor='customFile'>
